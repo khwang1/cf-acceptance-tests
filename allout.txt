@@ -1,0 +1,235 @@
++ which go
+/usr/local/go/bin/go
++ local_gopath=/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace
++ mkdir -p /Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/bin
++ export GOPATH=/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace:/Users/pivotal/go
++ GOPATH=/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace:/Users/pivotal/go
++ export PATH=/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/bin:/usr/local/bin:/Users/pivotal/.rbenv/shims:/Users/pivotal/.rbenv/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/go/bin:/usr/X11/bin:/Users/pivotal/go/bin
++ PATH=/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/Godeps/_workspace/bin:/usr/local/bin:/Users/pivotal/.rbenv/shims:/Users/pivotal/.rbenv/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/go/bin:/usr/X11/bin:/Users/pivotal/go/bin
++ go install -v github.com/onsi/ginkgo/ginkgo
++ echo 'RUNNING LOCAL CODE'
+RUNNING LOCAL CODE
++ ginkgo -r -v -slowSpecThreshold=120 quotas
+
+----------------helpers.Config{ApiEndpoint:"api.174.129.252.37.xip.io", AppsDomain:"174.129.252.37.xip.io", AdminUser:"admin", AdminPassword:"admin", PersistentAppHost:"persistent-app-osx", PersistentAppSpace:"CATS-persistent-space", PersistentAppOrg:"CATS-persistent-org", PersistentAppQuotaName:"CATS-persistent-quota", SkipSSLValidation:true, ArtifactsDirectory:"../results"}
+-------------------
+
+-----------------------------
+RUN TESTS
+--------------------------------
+Running Suite: Quotas
+=====================
+Random Seed: [1m1397695584[0m
+Will run [1m1[0m of [1m1[0m specs
+
+[0mQuota Lifecycle[0m [90mCreate and Destroy[0m 
+  [1mshould succeed[0m
+  [37m/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/quotas/quota_lifecycle_test.go:33[0m
+
+---------------
+SetupEnvironment:BeforeEach...
+---------------------------
+
+ >  gcf api api.174.129.252.37.xip.io --skip-ssl-validation
+Setting api endpoint to api.174.129.252.37.xip.io...
+OK
+
+API endpoint: https://api.174.129.252.37.xip.io (API version: 2.2.0)
+Not logged in. Use 'gcf login' to log in.
+
+ >  gcf auth admin admin
+API endpoint: https://api.174.129.252.37.xip.io
+Authenticating...
+OK
+Use 'gcf target' to view or set your target org and space
+
+ >  gcf curl /v2/quota_definitions -X POST -d {"name":"CATS-QUOTA-1-2014_04_16-17h46m25.703s","non_basic_services_allowed":true,"total_services":100,"total_routes":1000,"memory_limit":10240}
+{
+  "metadata": {
+    "guid": "f100cbe8-6aa2-46f9-a437-568275ddc247",
+    "url": "/v2/quota_definitions/f100cbe8-6aa2-46f9-a437-568275ddc247",
+    "created_at": "2014-04-17T00:46:05+00:00",
+    "updated_at": null
+  },
+  "entity": {
+    "name": "CATS-QUOTA-1-2014_04_16-17h46m25.703s",
+    "non_basic_services_allowed": true,
+    "total_services": 100,
+    "total_routes": 1000,
+    "memory_limit": 10240,
+    "trial_db_allowed": false
+  }
+}
+QuotaDefinition Response: cf.GenericResource{Metadata:struct { Guid string "json:\"guid\"" }{Guid:"f100cbe8-6aa2-46f9-a437-568275ddc247"}}
+GUID f100cbe8-6aa2-46f9-a437-568275ddc247
+
+ >  gcf create-user CATS-USER-1-2014_04_16-17h46m25.703s meow
+Creating user CATS-USER-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+TIP: Assign roles with 'gcf set-org-role' and 'gcf set-space-role'
+
+ >  gcf create-org CATS-ORG-1-2014_04_16-17h46m25.703s
+Creating org CATS-ORG-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+TIP: Use 'gcf target -o CATS-ORG-1-2014_04_16-17h46m25.703s' to target new org
+
+ >  gcf set-quota CATS-ORG-1-2014_04_16-17h46m25.703s CATS-QUOTA-1-2014_04_16-17h46m25.703s
+Setting quota CATS-QUOTA-1-2014_04_16-17h46m25.703s to org CATS-ORG-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+ >  gcf logout
+Logging out...
+OK
+
+---------------
+SetupEnvironment:BeforeEach:set up space as regular user...
+---------------------------
+
+ >  gcf api api.174.129.252.37.xip.io --skip-ssl-validation
+Setting api endpoint to api.174.129.252.37.xip.io...
+OK
+
+API endpoint: https://api.174.129.252.37.xip.io (API version: 2.2.0)
+Not logged in. Use 'gcf login' to log in.
+
+ >  gcf auth admin admin
+API endpoint: https://api.174.129.252.37.xip.io
+Authenticating...
+OK
+Use 'gcf target' to view or set your target org and space
+
+ >  gcf create-space -o CATS-ORG-1-2014_04_16-17h46m25.703s CATS-SPACE-1-2014_04_16-17h46m25.703s
+Creating space CATS-SPACE-1-2014_04_16-17h46m25.703s in org CATS-ORG-1-2014_04_16-17h46m25.703s as admin...
+OK
+Assigning role SpaceManager to user admin in org CATS-ORG-1-2014_04_16-17h46m25.703s / space CATS-SPACE-1-2014_04_16-17h46m25.703s as admin...
+OK
+Assigning role SpaceDeveloper to user admin in org CATS-ORG-1-2014_04_16-17h46m25.703s / space CATS-SPACE-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+TIP: Use 'gcf target -o CATS-ORG-1-2014_04_16-17h46m25.703s -s CATS-SPACE-1-2014_04_16-17h46m25.703s' to target new space
+
+ >  gcf set-space-role CATS-USER-1-2014_04_16-17h46m25.703s CATS-ORG-1-2014_04_16-17h46m25.703s CATS-SPACE-1-2014_04_16-17h46m25.703s SpaceManager
+Assigning role SpaceManager to user CATS-USER-1-2014_04_16-17h46m25.703s in org CATS-ORG-1-2014_04_16-17h46m25.703s / space CATS-SPACE-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+ >  gcf set-space-role CATS-USER-1-2014_04_16-17h46m25.703s CATS-ORG-1-2014_04_16-17h46m25.703s CATS-SPACE-1-2014_04_16-17h46m25.703s SpaceDeveloper
+Assigning role SpaceDeveloper to user CATS-USER-1-2014_04_16-17h46m25.703s in org CATS-ORG-1-2014_04_16-17h46m25.703s / space CATS-SPACE-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+ >  gcf set-space-role CATS-USER-1-2014_04_16-17h46m25.703s CATS-ORG-1-2014_04_16-17h46m25.703s CATS-SPACE-1-2014_04_16-17h46m25.703s SpaceAuditor
+Assigning role SpaceAuditor to user CATS-USER-1-2014_04_16-17h46m25.703s in org CATS-ORG-1-2014_04_16-17h46m25.703s / space CATS-SPACE-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+ >  gcf logout
+Logging out...
+OK
+
+---------------
+SetupEnvironment:BeforeEach:target space as regular user...
+---------------------------
+
+ >  gcf api api.174.129.252.37.xip.io --skip-ssl-validation
+Setting api endpoint to api.174.129.252.37.xip.io...
+OK
+
+API endpoint: https://api.174.129.252.37.xip.io (API version: 2.2.0)
+Not logged in. Use 'gcf login' to log in.
+
+ >  gcf auth CATS-USER-1-2014_04_16-17h46m25.703s meow
+API endpoint: https://api.174.129.252.37.xip.io
+Authenticating...
+OK
+Use 'gcf target' to view or set your target org and space
+
+ >  gcf target -o CATS-ORG-1-2014_04_16-17h46m25.703s -s CATS-SPACE-1-2014_04_16-17h46m25.703s
+API endpoint: https://api.174.129.252.37.xip.io (API version: 2.2.0)
+User:         CATS-USER-1-2014_04_16-17h46m25.703s
+Org:          CATS-ORG-1-2014_04_16-17h46m25.703s
+Space:        CATS-SPACE-1-2014_04_16-17h46m25.703s
+
+***************************************
+Test Running
+ >  gcf quotas
+Getting quotas as CATS-USER-1-2014_04_16-17h46m25.703s...
+OK
+
+name                                    memory limit   routes   service instances   
+default                                 10G            1000     100   
+foleyness                               100G           10       10   
+CATS-QUOTA-1-2014_04_16-11h36m29.328s   10G            1000     100   
+CATS-persistent-quota                   10G            1000     100   
+CATS-QUOTA-1-2014_04_16-14h00m12s       10G            1000     100   
+CATS-QUOTA-1-2014_04_16-14h46m03.377s   10G            1000     100   
+minimal                                 0              0        0   
+CATS-QUOTA-1-2014_04_16-15h03m15.689s   10G            1000     100   
+CATS-QUOTA-1-2014_04_16-17h46m25.703s   10G            1000     100   
+
+ >  gcf create-quota e5cf6078-20d5-4d57-7da9-a07a71f09741
+Creating quota e5cf6078-20d5-4d57-7da9-a07a71f09741 as CATS-USER-1-2014_04_16-17h46m25.703s...
+FAILED
+Server error, status code: 403, error code: 10003, message: You are not authorized to perform the requested action
+
+---------------
+SetupEnvironment:AfterEach...
+---------------------------
+
+ >  gcf logout
+Logging out...
+OK
+
+ >  gcf api api.174.129.252.37.xip.io --skip-ssl-validation
+Setting api endpoint to api.174.129.252.37.xip.io...
+OK
+
+API endpoint: https://api.174.129.252.37.xip.io (API version: 2.2.0)
+Not logged in. Use 'gcf login' to log in.
+
+ >  gcf auth admin admin
+API endpoint: https://api.174.129.252.37.xip.io
+Authenticating...
+OK
+Use 'gcf target' to view or set your target org and space
+
+ >  gcf delete-user -f CATS-USER-1-2014_04_16-17h46m25.703s
+Deleting user CATS-USER-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+ >  gcf delete-org -f CATS-ORG-1-2014_04_16-17h46m25.703s
+Deleting org CATS-ORG-1-2014_04_16-17h46m25.703s as admin...
+OK
+
+ >  gcf curl /v2/quota_definitions/f100cbe8-6aa2-46f9-a437-568275ddc247?recursive=true -X DELETE -d 
+
+
+ >  gcf logout
+Logging out...
+OK
+
+[91m[1m• Failure [32.810 seconds][0m
+Quota Lifecycle
+[90m(/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/quotas/quota_lifecycle_test.go:43)[0m
+  Create and Destroy
+  [90m(/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/quotas/quota_lifecycle_test.go:35)[0m
+    [91m[1mshould succeed [It][0m
+    [90m(/Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/quotas/quota_lifecycle_test.go:33)[0m
+
+    [91mExpected to see 'OK', got stuck at: "Creating quota e5cf6078-20d5-4d57-7da9-a07a71f09741 as CATS-USER-1-2014_04_16-17h46m25.703s...\nFAILED\nServer error, status code: 403, error code: 10003, message: You are not authorized to perform the requested action\n".
+    
+    Full output:
+    
+    Creating quota e5cf6078-20d5-4d57-7da9-a07a71f09741 as CATS-USER-1-2014_04_16-17h46m25.703s...
+    FAILED
+    Server error, status code: 403, error code: 10003, message: You are not authorized to perform the requested action
+    [0m
+
+    /Users/pivotal/go/src/github.com/cloudfoundry/cf-acceptance-tests/quotas/quota_lifecycle_test.go:28
+[90m------------------------------[0m
+
+[1m[91mRan 1 of 1 Specs in 32.811 seconds[0m
+[1m[91mFAIL![0m -- [32m[1m0 Passed[0m | [91m[1m1 Failed[0m | [33m[1m0 Pending[0m | [36m[1m0 Skipped[0m --- FAIL: TestQuotas (32.81 seconds)
+FAIL
+
+Ginkgo ran in 34.090130393s
+Test Suite Failed
